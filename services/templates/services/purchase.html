@@ -1,0 +1,9 @@
+<h2>Purchase {{ service.name }}</h2>
+<p>Price: ₦{{ service.price }}</p>
+
+<form method="POST">
+    {% csrf_token %}
+    <label for="quantity">Quantity:</label>
+    <input type="number" name="quantity" value="1" min="1" required>
+    <button type="submit">Purchase</button>
+</form>
