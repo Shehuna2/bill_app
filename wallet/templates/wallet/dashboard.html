@@ -1,0 +1,22 @@
+<h2>Wallet Dashboard</h2>
+<p>Current Balance: ₦{{ wallet.balance }}</p>
+
+<h3>Transaction History</h3>
+<table>
+    <thead>
+        <tr>
+            <th>Type</th>
+            <th>Amount</th>
+            <th>Date</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for transaction in transactions %}
+            <tr>
+                <td>{{ transaction.transaction_type }}</td>
+                <td>₦{{ transaction.amount }}</td>
+                <td>{{ transaction.created_at }}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
