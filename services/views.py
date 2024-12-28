@@ -25,3 +25,12 @@ def purchase_service(request, service_id):
             return render(request, "services/failed.html", {"error": "Insufficient wallet balance."})
 
     return render(request, "services/purchase.html", {"service": service})
+
+
+from django.contrib.auth.decorators import login_required
+
+@login_required
+def purchase_history(request):
+    purchases = request.user.purchases.all().order_by('-purchased_at')
+    
+    return render(request, "services/purchase_history.html", {"purchases": purchases})
