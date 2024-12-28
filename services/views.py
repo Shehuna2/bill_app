@@ -4,7 +4,7 @@ from django.core.mail import send_mail
 from django.conf import settings
 from .models import Service, Purchase
 from wallet.models import Wallet
-
+from .utils import process_payment
 
 @login_required
 def purchase_service(request, service_id):
@@ -17,20 +17,19 @@ def purchase_service(request, service_id):
 
         if wallet.has_sufficient_balance(total_price):
             wallet.withdraw(total_price)
-            Purchase.objects.create(
-                user=request.user,
-                service=service,
-                quantity=quantity,
-                total_price=total_price,
-            )
-            # Send notification email
-            send_mail(
-                subject="Purchase Successful",
-                message=f"Dear {request.user.username},\n\nYou have successfully purchased {quantity} x {service.name} for ₦{total_price}.",
-                from_email=settings.EMAIL_HOST_USER,
-                recipient_list=[request.user.email],
-            )
-            return render(request, "services/success.html", {"service": service, "quantity": quantity})
+            response = process_payment(service.service_type, service.name, total_price)
+
+            if response.get("status") == "success":
+                Purchase.objects.create(
+                    user=request.user,
+                    service=service,
+                    quantity=quantity,
+                    total_price=total_price,
+                )
+                return render(request, "services/success.html", {"service": service, "quantity": quantity})
+            else:
+                return render(request, "services/failed.html", {"error": "Payment failed. Please try again."})
+
         else:
             return render(request, "services/failed.html", {"error": "Insufficient wallet balance."})
 
