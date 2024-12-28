@@ -3,6 +3,12 @@ from django.contrib.auth.decorators import login_required
 from .opay_integration import initialize_opay_payment, verify_opay_payment
 
 @login_required
+def wallet_dashboard(request):
+    wallet = request.user.wallet
+    transactions = wallet.transactions.all().order_by('-created_at')
+    return render(request, "wallet/dashboard.html", {"wallet": wallet, "transactions": transactions})
+
+@login_required
 def deposit_view(request):
     if request.method == "POST":
         amount = float(request.POST["amount"])
