@@ -1,0 +1,26 @@
+<h2>Purchase History</h2>
+
+{% if purchases %}
+    <table>
+        <thead>
+            <tr>
+                <th>Service</th>
+                <th>Quantity</th>
+                <th>Total Price</th>
+                <th>Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for purchase in purchases %}
+                <tr>
+                    <td>{{ purchase.service.name }}</td>
+                    <td>{{ purchase.quantity }}</td>
+                    <td>₦{{ purchase.total_price }}</td>
+                    <td>{{ purchase.purchased_at }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <p>You have no purchase history.</p>
+{% endif %}
