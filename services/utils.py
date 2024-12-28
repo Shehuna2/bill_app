@@ -3,7 +3,7 @@ import requests
 def process_payment(service_type, service_name, amount, phone_number=None):
     url = "https://api.opay.com/transaction/v1/service"
     headers = {
-        "Authorization": "Bearer your_opay_api_key",
+        "Authorization": "OPAYPRV17351582772620.012108487175019",
         "Content-Type": "application/json",
     }
     data = {
